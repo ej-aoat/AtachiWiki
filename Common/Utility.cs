@@ -183,5 +183,40 @@ namespace WikiPlex.Common
 
             return string.Empty;
         }
+
+		static int seed = 0;
+
+		/// <summary>
+		/// ランダムなテキストを生成します
+		/// </summary>
+		/// <param name="length"></param>
+		/// <returns></returns>
+		public static string GeneratingPassword(string prefix, int length)
+		{
+			if (length > 128 || length < 0)
+				throw new ArgumentException("ArgumentException", "length");
+			if(seed == 0)
+				seed = Environment.TickCount;
+
+			byte[] array = new byte[length];
+			char[] op = new char[length];
+			char[] punctuations = "_-|.".ToCharArray();
+			Random rdm = new Random(++seed);
+			rdm.NextBytes(array);
+			//new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(array);
+			for (int i = 0; i < array.Length; i++)
+			{
+				int num = array[i] % (62 + punctuations.Length);
+				if (num < 10)
+					op[i] = (char)(48 + num);
+				else if (num < 36)
+					op[i] = (char)(65 + num - 10);
+				else if (num < 62)
+					op[i] = (char)(97 + num - 36);
+				else
+					op[i] = (char)punctuations[num - 62];
+			}
+			return prefix + new string(op);
+		}
     }
 }

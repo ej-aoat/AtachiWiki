@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using log4net;
+using WikiPlex.Parsing;
 
 namespace WikiPlex.Formatting.Renderers
 {
@@ -21,11 +22,13 @@ namespace WikiPlex.Formatting.Renderers
 			}
 		}
 
+		public Scope CurrentRendereScope { set { ;} }
+
 		protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
 		{
 			if (scopeName == ScopeName.Comment)
 			{
-				LOG.InfoFormat("[Comment] {0}", input);
+				
 			}
 
 			return null;

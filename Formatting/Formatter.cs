@@ -158,6 +158,11 @@ namespace WikiPlex.Formatting
 
             try
             {
+				if (renderer is IWikiRenderer)
+				{
+					((IWikiRenderer)renderer).CurrentRendereScope = scope;
+				}
+
                 renderedContent = renderer == null
                                     ? string.Format("<span class=\"unresolved\">Cannot resolve macro, as no renderers were found.</span>[{0}]", EncodeContent(content))
                                     : renderer.Expand(scope.Name, content, EncodeContent, EncodeAttributeContent);

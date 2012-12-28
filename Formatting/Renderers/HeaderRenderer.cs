@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using WikiPlex.Parsing;
 
 namespace WikiPlex.Formatting.Renderers
 {
 	class HeaderRenderer : Renderer, IWikiRenderer
 	{
+		static string AreaEditHyperLinkText = "<div class=\"areaedit\" style=\"margin:0px 0px 0px auto;text-align:right;\"><a href=\"{0}\">[編集]</a></div>";
 		IList<HeaderItem> topLevelHeaderList = new List<HeaderItem>();
 
 		public IList<HeaderItem> TopLevelItems
@@ -30,6 +32,160 @@ namespace WikiPlex.Formatting.Renderers
 			}
 		}
 
+		
+		Stack<HeaderItem> headerItemStack = new Stack<HeaderItem>();
+		Scope currentScope;
+		AreaEditInfo lastAreaEditInfo;
+		int lastStartPos = 0;
+
+		private void AddAreaeditInfo()
+		{
+			if (lastAreaEditInfo != null)
+			{
+				int l = lastStartPos - lastAreaEditInfo.StartPos;
+				lastAreaEditInfo.Length = l;
+			}
+
+			var n = new AreaEditInfo();
+			n.StartPos = lastStartPos;
+			n.Length = -1;
+			n.Key = WikiPlex.Common.Utility.GeneratingPassword("areee_", 15);
+
+			((WikiEngine)engine).AreaEditInfos.Add(n);
+			lastAreaEditInfo = n;
+		}
+
+		public Scope CurrentRendereScope { set { currentScope = value; } }
+
+		protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
+		{
+			string ancher = "";
+			string escText;
+			HeaderItem headerItem;
+			StringBuilder sb;
+
+			switch (scopeName)
+			{
+				case ScopeName.HeadingOneBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel1(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h1 id=\"{0}\">", ancher);
+				case ScopeName.HeadingOneBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingOneEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h1>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				case ScopeName.HeadingTwoBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel2(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h2 id=\"{0}\">", ancher);
+				case ScopeName.HeadingTwoBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingTwoEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h2>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				case ScopeName.HeadingThreeBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel3(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h3 id=\"{0}\">", ancher);
+				case ScopeName.HeadingThreeBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingThreeEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h3>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				case ScopeName.HeadingFourBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel4(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h4 id=\"{0}\">", ancher);
+				case ScopeName.HeadingFourBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingFourEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h4>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				case ScopeName.HeadingFiveBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel5(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h5 id=\"{0}\">", ancher);
+				case ScopeName.HeadingFiveBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingFiveEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h5>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				case ScopeName.HeadingSixBegin:
+					lastStartPos = currentScope.Index;
+					ancher = RandomeAncherName();
+					HeaderLevel6(headerItemStack, "", ancher, topLevelHeaderList);
+					return string.Format("<h6 id=\"{0}\">", ancher);
+				case ScopeName.HeadingSixBody:
+					escText = htmlEncode(input);
+					headerItem = headerItemStack.Peek();
+					headerItem.Title = escText;
+					return escText;
+				case ScopeName.HeadingSixEnd:
+					AddAreaeditInfo();
+					sb = new StringBuilder();
+					sb.Append("</h6>\r");
+					sb.AppendFormat(AreaEditHyperLinkText, lastAreaEditInfo.Key);
+					sb.Append("\r");
+					return sb.ToString();
+				default:
+					return null;
+			}
+		}
+
+
+		/// <summary>
+		/// ランダムなテキストを作成します
+		/// </summary>
+		/// <returns></returns>
+		private string RandomeAncherName()
+		{
+			return WikiPlex.Common.Utility.GeneratingPassword("hdid_", 10);
+		}
+
+		//=====================================================================
+		#region 静的メンバ
+		//=====================================================================
 		static void HeaderLevel1(Stack<HeaderItem> stack, string headerText, string ancher, IList<HeaderItem> topLevelHeaderItemList)
 		{
 			stack.Clear(); // 無条件でスタックはクリアする
@@ -306,104 +462,8 @@ namespace WikiPlex.Formatting.Renderers
 			h5item.Children.Add(HeaderLevel6Item);
 			stack.Push(HeaderLevel6Item);
 		}
+		#endregion
 
-		Stack<HeaderItem> headerItemStack = new Stack<HeaderItem>();
-
-
-		protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
-		{
-			string ancher = "";
-			string escText;
-			HeaderItem headerItem;
-
-			switch (scopeName)
-			{
-				case ScopeName.HeadingOneBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel1(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h1 id=\"{0}\">", ancher);
-				case ScopeName.HeadingOneBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingOneEnd:
-					//headerItemStack.Pop();
-					return "</h1>\r";
-				case ScopeName.HeadingTwoBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel2(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h2 id=\"{0}\">", ancher);
-				case ScopeName.HeadingTwoBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingTwoEnd:
-					//headerItem = headerItemStack.Pop();
-					return "</h2>\r";
-				case ScopeName.HeadingThreeBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel3(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h3 id=\"{0}\">", ancher);
-				case ScopeName.HeadingThreeBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingThreeEnd:
-					//headerItemStack.Pop();
-					return "</h3>\r";
-				case ScopeName.HeadingFourBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel4(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h4 id=\"{0}\">", ancher);
-				case ScopeName.HeadingFourBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingFourEnd:
-					//headerItemStack.Pop();
-					return "</h4>\r";
-				case ScopeName.HeadingFiveBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel5(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h5 id=\"{0}\">", ancher);
-				case ScopeName.HeadingFiveBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingFiveEnd:
-					//headerItemStack.Pop();
-					return "</h5>\r";
-				case ScopeName.HeadingSixBegin:
-					ancher = RandomeAncherName();
-					HeaderLevel6(headerItemStack, "", ancher, topLevelHeaderList);
-					return string.Format("<h6 id=\"{0}\">", ancher);
-				case ScopeName.HeadingSixBody:
-					escText = htmlEncode(input);
-					headerItem = headerItemStack.Peek();
-					headerItem.Title = escText;
-					return escText;
-				case ScopeName.HeadingSixEnd:
-					//headerItemStack.Pop();
-					return "</h6>\r";
-				default:
-					return null;
-			}
-		}
-
-
-		/// <summary>
-		/// ランダムなテキストを作成します
-		/// </summary>
-		/// <returns></returns>
-		private string RandomeAncherName()
-		{
-			return "hd" + Path.GetRandomFileName().Replace(".", ""); // XXXXX.XXXのようなランダムな文字列ができあがるので、「.」を消去します。
-		}
 
 		#region IBinWikiRenderer メンバー
 
@@ -417,9 +477,10 @@ namespace WikiPlex.Formatting.Renderers
 
 		}
 
+		IWikiEngine engine = null;
 		public IWikiEngine Engine
 		{
-			set { ;}
+			set { engine = value;}
 		}
 		#endregion
 	}

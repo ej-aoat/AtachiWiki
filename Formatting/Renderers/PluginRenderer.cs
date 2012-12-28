@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WikiPlex.Plugins;
+using WikiPlex.Parsing;
 
 namespace WikiPlex.Formatting.Renderers
 {
@@ -24,6 +25,8 @@ namespace WikiPlex.Formatting.Renderers
 
 		IWikiPlugin currentPlugin = null;
 		WikiEngine engine = null;
+
+		public Scope CurrentRendereScope { set { ;} }
 
 		protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
 		{

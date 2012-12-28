@@ -152,6 +152,9 @@ namespace WikiPlex
 			if (string.IsNullOrEmpty(wikiContent))
 				return wikiContent;
 
+			areaEditInfos.Clear();
+			PreRenderedText = wikiContent;
+
 			foreach (var plugin in Plugins)
 			{
 				plugin.PreRenderer(this);
@@ -168,10 +171,10 @@ namespace WikiPlex
 			}
 
 			if (IsInsertReturnCodeAtEnd)
-				wikiContent += "\n";
+				PreRenderedText += "\n";
 
-			wikiContent = wikiContent.Replace("\r\n", "\n");
-			parser.Parse(wikiContent, macros, ScopeAugmenters.All, formatter.RecordParse);
+			PreRenderedText = PreRenderedText.Replace("\r\n", "\n");
+			parser.Parse(PreRenderedText, macros, ScopeAugmenters.All, formatter.RecordParse);
 			var rt = ReplaceNewLines(formatter.Format(wikiContent));
 
 			foreach (var post in formatter.Renderers)
@@ -208,6 +211,16 @@ namespace WikiPlex
 		/// レンダリングする文字列の末尾に強制的に改行コードを1つ追加するかどうか。
 		/// </summary>
 		public bool IsInsertReturnCodeAtEnd { get; set; }
+
+		/// <summary>
+		/// エリア編集データリスト
+		/// </summary>
+		public ICollection<AreaEditInfo> AreaEditInfos { get { return areaEditInfos; } }
+
+		/// <summary>
+		/// レンダリング直前の対象文字列
+		/// </summary>
+		public string PreRenderedText { get; private set; }
 		#endregion
 
 
@@ -215,6 +228,7 @@ namespace WikiPlex
 		#region フィールド
 		//=====================================================================
 		IEnumerable<IWikiPlugin> plugins;
+		List<AreaEditInfo> areaEditInfos = new List<AreaEditInfo>();
 		#endregion
 
 		private static string ReplaceNewLines(string input)

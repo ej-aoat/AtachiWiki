@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WikiPlex;
+using System.IO;
 
 namespace AtachiWiki.ConsoleTest
 {
@@ -24,8 +25,13 @@ namespace AtachiWiki.ConsoleTest
 			var engine = new WikiEngine();
 			string rs = engine.Render(text);
 
-			Console.WriteLine(text.Substring(1, 18));
-			Console.WriteLine(rs);
+			string fname = @"C:\Test.html";
+			Encoding utf8 = Encoding.GetEncoding("UTF-8");
+			using (StreamWriter w = new StreamWriter(fname, false, utf8))
+			{
+				w.WriteLine(rs);
+			}
+			
 
 			Console.ReadLine();
 		}

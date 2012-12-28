@@ -28,7 +28,7 @@ namespace WikiPlex
             Register<SubscriptMacro>();
             Register<SuperscriptMacro>();
             Register<HorizontalLineMacro>();
-            Register<LinkMacro>();
+            //Register<LinkMacro>();
             Register<ImageMacro>();
             Register<SourceCodeMacro>();
             Register<ListMacro>();
@@ -41,8 +41,8 @@ namespace WikiPlex
             Register<ContentRightAlignmentMacro>();
             Register<IndentationMacro>();
 			Register<ImageRepositoryMacro>();
-			Register<PluginMacro>();
-			Register<CommentMacro>();
+			//Register<PluginMacro>();
+			//Register<CommentMacro>();
         }
 
         /// <summary>

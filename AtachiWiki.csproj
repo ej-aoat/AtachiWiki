@@ -95,6 +95,7 @@
     <Compile Include="Common\TextPart.cs" />
     <Compile Include="Common\Utility.cs" />
     <Compile Include="Common\Guard.cs" />
+    <Compile Include="Formatting\AreaEditInfo.cs" />
     <Compile Include="Formatting\Renderers\CommentRenderer.cs" />
     <Compile Include="Formatting\Renderers\HeaderRenderer.cs" />
     <Compile Include="Formatting\Renderers\IWikiRenderer.cs" />

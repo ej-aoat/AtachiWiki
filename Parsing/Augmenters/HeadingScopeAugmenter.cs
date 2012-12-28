@@ -18,20 +18,37 @@ namespace WikiPlex.Parsing
 
 				if (scope.Name == ScopeName.HeadingOneBegin)
 				{
-					Console.WriteLine("[S1]Pos = " + scope.Index);
+					scope.Data = scope.Index;
 				}
 				if (scope.Name == ScopeName.HeadingOneEnd)
 				{
-					Console.WriteLine("[E1]Pos = " + scope.Index);
+					scope.Data =  scope.Index;
 				}
 				if (scope.Name == ScopeName.HeadingTwoBegin)
 				{
-					Console.WriteLine("[S2]Pos = " + scope.Index);
+					scope.Data = scope.Index;
 				}
 				if (scope.Name == ScopeName.HeadingTwoEnd)
 				{
-					Console.WriteLine("[E2]Pos = " + scope.Index);
+					scope.Data = scope.Index;
 				}
+				if (scope.Name == ScopeName.HeadingThreeEnd)
+				{
+					scope.Data = scope.Index;
+				}
+				if (scope.Name == ScopeName.HeadingFourEnd)
+				{
+					scope.Data = scope.Index;
+				}
+				if (scope.Name == ScopeName.HeadingFiveEnd)
+				{
+					scope.Data = scope.Index;
+				}
+				if (scope.Name == ScopeName.HeadingSixEnd)
+				{
+					scope.Data = scope.Index;
+				}
+
 				augmentedScopes.Add(scope);
 
 			}

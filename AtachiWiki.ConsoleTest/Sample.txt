@@ -1,8 +1,3 @@
-﻿
-! Header1
+﻿! ようこそ BinWikiの世界へ！
 
-prpr
-
-!! Header2
-
-hoge
+* [構文ヘルプ]
