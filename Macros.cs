@@ -40,6 +40,9 @@ namespace WikiPlex
             Register<ContentLeftAlignmentMacro>();
             Register<ContentRightAlignmentMacro>();
             Register<IndentationMacro>();
+			Register<ImageRepositoryMacro>();
+			Register<PluginMacro>();
+			Register<CommentMacro>();
         }
 
         /// <summary>

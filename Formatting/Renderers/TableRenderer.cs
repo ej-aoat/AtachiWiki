@@ -1,59 +1,168 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using log4net;
+using System.Text;
 
 namespace WikiPlex.Formatting.Renderers
 {
-    /// <summary>
-    /// Will render all table based scopes.
-    /// </summary>
-    public class TableRenderer : Renderer
-    {
-        /// <summary>
-        /// Gets the collection of scope names for this <see cref="IRenderer"/>.
-        /// </summary>
-        protected override ICollection<string> ScopeNames
-        {
-            get 
-            { 
-                return new[] {
-                                ScopeName.TableBegin, ScopeName.TableCell, ScopeName.TableCellHeader,
-                                ScopeName.TableEnd, ScopeName.TableRowBegin, ScopeName.TableRowEnd,
-                                ScopeName.TableRowHeaderBegin, ScopeName.TableRowHeaderEnd
-                             }; 
-            }
-        }
+	class TableRenderer : WikiPlex.Formatting.Renderers.Renderer//, IBinWikiRenderer
+	{
+		ILog LOG = LogManager.GetLogger(typeof(TableRenderer));
 
-        /// <summary>
-        /// Will expand the input into the appropriate content based on scope.
-        /// </summary>
-        /// <param name="scopeName">The scope name.</param>
-        /// <param name="input">The input to be expanded.</param>
-        /// <param name="htmlEncode">Function that will html encode the output.</param>
-        /// <param name="attributeEncode">Function that will html attribute encode the output.</param>
-        /// <returns>The expanded content.</returns>
-        protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
-        {
-            switch (scopeName)
-            {
-                case ScopeName.TableBegin:
-                    return "<table>";
-                case ScopeName.TableEnd:
-                    return "</table>";
-                case ScopeName.TableCell:
-                    return "</td><td>";
-                case ScopeName.TableCellHeader:
-                    return "</th><th>";
-                case ScopeName.TableRowBegin:
-                    return "<tr><td>";
-                case ScopeName.TableRowEnd:
-                    return "</td></tr>";
-                case ScopeName.TableRowHeaderBegin:
-                    return "<tr><th>";
-                case ScopeName.TableRowHeaderEnd:
-                    return "</th></tr>";
-                default:
-                    return null;
-            }
-        }
-    }
+		WikiEngine engine = null;
+		bool isHeadingRow = false;
+		bool isRow = false;
+
+		int colspan = 0;
+
+		protected override string PerformExpand(string scopeName, string input, Func<string, string> htmlEncode, Func<string, string> attributeEncode)
+		{
+			if (scopeName == ScopeName.MTableBegin)
+				return "<table border=\"1\">";
+			if (scopeName == ScopeName.MTableEnd)
+			{
+				if (isRow)
+					return "</tr></table>";
+				return "</table>";
+			}
+			if (scopeName == ScopeName.MTableCellStart)
+			{
+				string colspanText = "";
+				string bgcolor = "";
+
+				StringBuilder styleText = new StringBuilder();
+
+				string[] args = input.Split('|');
+
+				// セル引数のパラメータを解析
+				foreach (var arg in args)
+				{
+					if (arg == "") continue;
+
+					// ◇colspan
+					if (arg.StartsWith(">"))
+					{
+						string REGEX_PATTERN = @"(>+)";
+						Match m = Regex.Match(arg, REGEX_PATTERN);
+						if (m.Success)
+						{
+							var spanText = m.Groups[1].Value;
+							colspan = spanText.Length;
+						}
+					}
+					// ◇セルの背景色設定
+					else if (arg.StartsWith("BGCOLOR:"))
+					{
+						string REGEX_PATTERN = @"bgcolor\:(.+)";
+						var arglow = arg.ToLower();
+						Match m = Regex.Match(arglow, REGEX_PATTERN);
+						if (m.Success)
+						{
+							var colorText = m.Groups[1].Value;
+							bgcolor = "bgcolor=\"" + colorText + "\"";
+						}
+					}
+					// ◇
+					else if (arg.StartsWith("width:"))
+					{
+						string REGEX_PATTERN = @"width\:(.+)";
+						var arglow = arg.ToLower();
+						Match m = Regex.Match(arglow, REGEX_PATTERN);
+						if (m.Success)
+						{
+							var widthText = m.Groups[1].Value;
+							styleText.Append("width:" + widthText).Append("; ");
+						}
+					}
+				}
+
+				if (colspan != 0)
+				{
+					colspanText = "colspan=\"" + colspan + "\"";
+					colspan = 0;
+				}
+
+				if (styleText.Length != 0)
+					styleText.Insert(0, "style=\"").Append("\"");
+
+				if (isHeadingRow)
+				{
+					return string.Format("<th {0} {1}>", colspanText + bgcolor, styleText.ToString());
+				}
+				else
+				{
+					return string.Format("<td {0} {1}>", colspanText + bgcolor, styleText.ToString());
+				}
+			}
+			if (scopeName == ScopeName.MTableCellEnd)
+			{
+				if (isHeadingRow)
+					return "</th>";
+				return "</td>";
+			}
+			if (scopeName == ScopeName.MTableCell)
+			{
+
+				return input;
+			}
+			if (scopeName == ScopeName.MTableNewLine)
+			{
+				isHeadingRow = false;
+				isRow = true;
+
+				if (isRow)
+					return "</tr><tr>";
+				else
+					return "<tr>";
+			}
+			if (scopeName == ScopeName.MTableNewHeaderLine)
+			{
+				isHeadingRow = true;
+				isRow = true;
+
+				if (isRow)
+					return "</tr><tr>";
+				else
+					return "<tr>";
+			}
+
+			return null;
+		}
+
+
+		protected override ICollection<string> ScopeNames
+		{
+			get
+			{
+				return new[]
+				{
+					ScopeName.MTableBegin,
+					ScopeName.MTableEnd,
+					ScopeName.MTableCellStart,
+					ScopeName.MTableCell,ScopeName.MTableCellEnd,
+					ScopeName.MTableNewLine,ScopeName.MTableNewHeaderLine
+				};
+			}
+		}
+
+		#region IBinWikiRenderer メンバー
+
+		public void PreRenderer()
+		{
+			isHeadingRow = false;
+		}
+
+		public void PostRenderer()
+		{
+
+		}
+
+		public WikiPlex.IWikiEngine Engine
+		{
+			set { engine = value as WikiEngine; }
+		}
+
+		#endregion
+	}
 }

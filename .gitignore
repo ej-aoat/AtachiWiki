@@ -29,3 +29,7 @@ _ReSharper*/
 $tf*/
 .nuget/
 packages/
+Index.dat
+AtachiWikiNUnit.nunit
+Storage.dat
+AtachiWikiNUnit.VisualState.xml

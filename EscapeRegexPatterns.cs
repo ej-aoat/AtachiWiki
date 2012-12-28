@@ -13,6 +13,6 @@ namespace WikiPlex
         /// <summary>
         /// The regex pattern for escaping content within all code blocks.
         /// </summary>
-        public const string FullEscape = @"(?s){{.*?}}|{"".*?""}|(?<![<>:]){(?!"").*?(?<!"")}(?![<>:])|\[.*?\]";
+		public const string FullEscape = @"(?s){{.*?}}|{"".*?""}|(?<![<>:]){(?!(""|\|)).*?(?<!(""|\|))}(?![<>:])|\[.*?\]";
     }
 }

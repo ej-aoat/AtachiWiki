@@ -24,6 +24,7 @@ namespace WikiPlex
             Register<TableMacro, TableScopeAugmenter>();
             Register<ListMacro, ListScopeAugmenter>();
             Register<IndentationMacro, IndentationScopeAugmenter>();
+			Register<HeadingsMacro, HeadingScopeAugmenter>();
         }
 
         /// <summary>

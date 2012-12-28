@@ -43,7 +43,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DocumentationFile>bin\Debug\WikiPlex.XML</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -59,13 +59,18 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ColorCode, Version=1.0.1.62759, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ColorCode.1.0.1\lib\ColorCode.dll</HintPath>
+    <Reference Include="ColorCode">
+      <HintPath>packages\ColorCode.1.0.1\lib\ColorCode.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -77,22 +82,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GlobalAssemblyInfo.cs">
-      <Link>Properties\GlobalAssemblyInfo.cs</Link>
-    </Compile>
+    <Compile Include="ArgumentParserUtil.cs" />
     <Compile Include="Common\Dimensions.cs" />
     <Compile Include="Common\ImagePart.cs" />
     <Compile Include="Common\ImagePartExtras.cs" />
     <Compile Include="Common\RenderException.cs" />
+    <Compile Include="Compilation\Macros\AtachiMacros.cs" />
+    <Compile Include="Compilation\Macros\ImageRepositoryMacro.cs" />
     <Compile Include="Compilation\Macros\IndentationMacro.cs" />
     <Compile Include="Compilation\Macros\ListMacro.cs" />
     <Compile Include="EscapeRegexPatterns.cs" />
     <Compile Include="Common\TextPart.cs" />
     <Compile Include="Common\Utility.cs" />
     <Compile Include="Common\Guard.cs" />
+    <Compile Include="Formatting\Renderers\CommentRenderer.cs" />
+    <Compile Include="Formatting\Renderers\HeaderRenderer.cs" />
+    <Compile Include="Formatting\Renderers\IWikiRenderer.cs" />
+    <Compile Include="Formatting\Renderers\ImageRepositoryRenderer.cs" />
     <Compile Include="Formatting\Renderers\IndentationRenderer.cs" />
     <Compile Include="Common\Parameters.cs" />
     <Compile Include="Formatting\Renderers\PlainTextRenderer.cs" />
+    <Compile Include="Formatting\Renderers\PluginRenderer.cs" />
     <Compile Include="Formatting\Renderers\Renderer.cs" />
     <Compile Include="Formatting\Renderers\SilverlightRendering\BaseVersionedSilverlightRenderer.cs" />
     <Compile Include="Formatting\Renderers\SilverlightRendering\Silverlight4Renderer.cs" />
@@ -100,7 +110,15 @@
     <Compile Include="Formatting\Renderers\VideoRendering\Channel9VideoRenderer.cs" />
     <Compile Include="Formatting\Renderers\VideoRendering\EmbeddedVideoRender.cs" />
     <Compile Include="Formatting\Renderers\VideoRendering\VimeoVideoRenderer.cs" />
+    <Compile Include="Parsing\Augmenters\HeadingScopeAugmenter.cs" />
     <Compile Include="Parsing\Augmenters\IndentationScopeAugmenter.cs" />
+    <Compile Include="Plugins.cs" />
+    <Compile Include="Plugins\BlockquotePlugin.cs" />
+    <Compile Include="Plugins\ContentsPlugin.cs" />
+    <Compile Include="Plugins\FontPlugin.cs" />
+    <Compile Include="Plugins\HelloPlugin.cs" />
+    <Compile Include="Plugins\IWikiPlugin.cs" />
+    <Compile Include="Repositories\IImageRepository.cs" />
     <Compile Include="Syndication\IXmlDocumentReader.cs" />
     <Compile Include="Syndication\XmlDocumentReaderWrapper.cs" />
     <Compile Include="Compilation\CompiledMacro.cs" />

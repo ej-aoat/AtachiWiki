@@ -108,6 +108,12 @@ namespace WikiPlex.Formatting
             return writer.ToString();
         }
 
+		/// <summary>
+		/// 外部にフォーマット時に使用するレンダラのインスタンスを解放する。
+		/// </summary>
+		public IEnumerable<IRenderer> Renderers { get { return renderers; } }
+
+
         /// <summary>
         /// Method used to encode content during formatting.
         /// </summary>

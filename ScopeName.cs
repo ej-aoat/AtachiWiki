@@ -107,6 +107,36 @@
         public const string VimeoVideo = "Vimeo Video";
         public const string WindowsMediaVideo = "Windows Media Video";
         public const string YouTubeVideo = "YouTube Video";
+
+		public const string Comment = "Comment Line";
+
+		public const string PluginTagStart = "PluginTagStart";
+		public const string PluginTagEnd = "PluginTagEnd";
+		public const string PluginBody = "PluginBody";
+		public const string PluginClosedTag = "PluginClosedTag";
+
+		// Mediawikiスタイルのテーブルを構成するWikiスタイル
+		public const string MTableBegin = "MTableBegin";
+		public const string MTableEnd = "MTableEnd";
+		public const string MTableNewLine = "MTableNewLine";
+		public const string MTableNewHeaderLine = "MTableNewHeaderLine";
+		public const string MTableCellStart = "MTableCellStart";
+		public const string MTableCell = "MTableCell";
+		public const string MTableCellEnd = "MTableCellEnd";
+
+
+		// Custome
+		// Image RepositoryMacro
+		public const string ImageRepositoryNoAlogn = "ImageRepositoryNoAlogn";
+		public const string ImageRepositoryHashNoAlogn = "ImageRepositoryHashNoAlogn";
+
+		// Header
+		public const string HeadingOneBody = "HeadingOneBody";
+		public const string HeadingTwoBody = "HeadingTwoBody";
+		public const string HeadingThreeBody = "HeadingThreeBody";
+		public const string HeadingFourBody = "HeadingFourBody";
+		public const string HeadingFiveBody = "HeadingFiveBody";
+		public const string HeadingSixBody = "HeadingSixBody";
 #pragma warning restore 1591
     }
 }

@@ -29,7 +29,6 @@ namespace WikiPlex
             Register<SyndicatedFeedRenderer>();
             Register<SilverlightRenderer>();
             Register<VideoRenderer>();
-            Register<TableRenderer>();
             Register<ContentAlignmentRenderer>();
             Register<IndentationRenderer>();
         }
