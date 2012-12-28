@@ -28,7 +28,7 @@ namespace WikiPlex
             Register<SubscriptMacro>();
             Register<SuperscriptMacro>();
             Register<HorizontalLineMacro>();
-            //Register<LinkMacro>();
+            Register<LinkMacro>();
             Register<ImageMacro>();
             Register<SourceCodeMacro>();
             Register<ListMacro>();

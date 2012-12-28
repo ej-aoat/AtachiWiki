@@ -9,7 +9,7 @@ namespace WikiPlex.Formatting.Renderers
 {
 	class HeaderRenderer : Renderer, IWikiRenderer
 	{
-		static string AreaEditHyperLinkText = "<div class=\"areaedit\" style=\"margin:0px 0px 0px auto;text-align:right;\"><a href=\"atwiki://areaedit?id={0}\">[編集]</a></div>";
+		static string AreaEditHyperLinkText = "<div name=\"{0}\" class=\"areaedit\" style=\"margin:0px 0px 0px auto;text-align:right;\"><a href=\"atwiki://areaedit?id={0}\">[編集]</a></div>";
 		IList<HeaderItem> topLevelHeaderList = new List<HeaderItem>();
 
 		public IList<HeaderItem> TopLevelItems
