@@ -151,10 +151,10 @@ namespace WikiPlex
 
 			if (string.IsNullOrEmpty(wikiContent))
 				return wikiContent;
-
+			
 			areaEditInfos.Clear();
 			PreRenderedText = wikiContent;
-
+			
 			foreach (var plugin in Plugins)
 			{
 				plugin.PreRenderer(this);
@@ -172,11 +172,11 @@ namespace WikiPlex
 
 			if (IsInsertReturnCodeAtEnd)
 				PreRenderedText += "\n";
-
+			
 			PreRenderedText = PreRenderedText.Replace("\r\n", "\n");
 			parser.Parse(PreRenderedText, macros, ScopeAugmenters.All, formatter.RecordParse);
-			var rt = ReplaceNewLines(formatter.Format(wikiContent));
-
+			var rt = ReplaceNewLines(formatter.Format(PreRenderedText));
+			
 			foreach (var post in formatter.Renderers)
 			{
 				var r = post as IWikiRenderer;
@@ -187,7 +187,7 @@ namespace WikiPlex
 			{
 				rt = plugin.PostRenderer(this, formatter, rt);
 			}
-
+			
 			return rt;
 		}
 
